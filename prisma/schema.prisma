@@ -1,0 +1,147 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// User model for students, teachers, and admins
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  role      UserRole @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  enrollments Enrollment[]
+  courses     Course[]      // For teachers
+  grades      Grade[]
+
+  @@map("users")
+}
+
+// Course model
+model Course {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  code        String   @unique // Course code like "CS101"
+  credits     Int      @default(3)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  teacherId String
+  teacher   User         @relation(fields: [teacherId], references: [id])
+  enrollments Enrollment[]
+  modules   Module[]
+  grades    Grade[]
+
+  @@map("courses")
+}
+
+// Module model for course content
+model Module {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  order       Int      // To maintain module sequence
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  courseId String
+  course   Course      @relation(fields: [courseId], references: [id])
+  lessons  Lesson[]
+
+  @@map("modules")
+}
+
+// Lesson model for individual lessons within modules
+model Lesson {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   // Lesson content (could be text, HTML, etc.)
+  order       Int      // To maintain lesson sequence within module
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  moduleId String
+  module   Module @relation(fields: [moduleId], references: [id])
+
+  @@map("lessons")
+}
+
+// Enrollment model to track student-course relationships
+model Enrollment {
+  id        String   @id @default(cuid())
+  enrolledAt DateTime @default(now())
+  status    EnrollmentStatus @default(ACTIVE)
+  grade     String?  // Letter grade like "A", "B", "C"
+
+  // Relations
+  studentId String
+  student   User   @relation(fields: [studentId], references: [id])
+  courseId  String
+  course    Course @relation(fields: [courseId], references: [id])
+
+  @@unique([studentId, courseId])
+  @@map("enrollments")
+}
+
+// Grade model for assignments and exams
+model Grade {
+  id          String   @id @default(cuid())
+  score       Float    // Numeric score
+  maxScore    Float    // Maximum possible score
+  type        GradeType
+  title       String   // Assignment/exam title
+  description String?
+  dueDate     DateTime?
+  submittedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  studentId String
+  student   User   @relation(fields: [studentId], references: [id])
+  courseId  String
+  course    Course @relation(fields: [courseId], references: [id])
+
+  @@map("grades")
+}
+
+// Enums
+enum UserRole {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  DROPPED
+  PENDING
+}
+
+enum GradeType {
+  ASSIGNMENT
+  QUIZ
+  EXAM
+  PROJECT
+  PARTICIPATION
+}
