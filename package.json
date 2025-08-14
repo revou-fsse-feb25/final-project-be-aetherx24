@@ -1,4 +1,4 @@
-{
+ w{
   "name": "lms-backend",
   "version": "1.0.0",
   "description": "Learning Management System Backend with NestJS and Prisma",
@@ -40,6 +40,7 @@
     "passport-local": "^1.0.0",
     "prisma": "^5.0.0",
     "@prisma/client": "^5.0.0",
+    "pg": "^8.11.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
   },

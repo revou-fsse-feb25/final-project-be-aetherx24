@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 // User model for students, teachers, and admins
@@ -17,7 +17,7 @@ model User {
   password  String
   firstName String
   lastName  String
-  role      UserRole @default(STUDENT)
+  role      String @default("STUDENT")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -89,7 +89,7 @@ model Lesson {
 model Enrollment {
   id        String   @id @default(cuid())
   enrolledAt DateTime @default(now())
-  status    EnrollmentStatus @default(ACTIVE)
+  status    String @default("ACTIVE")
   grade     String?  // Letter grade like "A", "B", "C"
 
   // Relations
@@ -107,7 +107,7 @@ model Grade {
   id          String   @id @default(cuid())
   score       Float    // Numeric score
   maxScore    Float    // Maximum possible score
-  type        GradeType
+  type        String
   title       String   // Assignment/exam title
   description String?
   dueDate     DateTime?
@@ -124,24 +124,4 @@ model Grade {
   @@map("grades")
 }
 
-// Enums
-enum UserRole {
-  STUDENT
-  TEACHER
-  ADMIN
-}
 
-enum EnrollmentStatus {
-  ACTIVE
-  COMPLETED
-  DROPPED
-  PENDING
-}
-
-enum GradeType {
-  ASSIGNMENT
-  QUIZ
-  EXAM
-  PROJECT
-  PARTICIPATION
-}
