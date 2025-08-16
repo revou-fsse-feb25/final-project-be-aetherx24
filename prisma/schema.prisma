@@ -5,6 +5,8 @@ generator client {
   provider = "prisma-client-js"
 }
 
+/// @seed="npm run db:seed"
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -47,6 +49,7 @@ model Course {
   enrollments Enrollment[]
   modules   Module[]
   grades    Grade[]
+  assignments Assignment[]
 
   @@map("courses")
 }
@@ -166,6 +169,7 @@ model Grade {
   courseId  String
   course    Course @relation(fields: [courseId], references: [id])
 
+  @@unique([studentId, courseId])
   @@map("grades")
 }
 
