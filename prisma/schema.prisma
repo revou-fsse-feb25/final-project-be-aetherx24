@@ -25,6 +25,7 @@ model User {
   enrollments Enrollment[]
   courses     Course[]      // For teachers
   grades      Grade[]
+  submissions Submission[]
 
   @@map("users")
 }
@@ -64,6 +65,7 @@ model Module {
   courseId String
   course   Course      @relation(fields: [courseId], references: [id])
   lessons  Lesson[]
+  assignments Assignment[]
 
   @@map("modules")
 }
@@ -100,6 +102,49 @@ model Enrollment {
 
   @@unique([studentId, courseId])
   @@map("enrollments")
+}
+
+// Assignment model for course assignments
+model Assignment {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  maxScore    Float
+  dueDate     DateTime?
+  type        String?  // HOMEWORK, QUIZ, EXAM, etc.
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+  moduleId String?
+  module   Module? @relation(fields: [moduleId], references: [id])
+  submissions Submission[]
+
+  @@map("assignments")
+}
+
+// Submission model for student assignments
+model Submission {
+  id          String   @id @default(cuid())
+  content     String   // Submission content (text, file path, etc.)
+  score       Float?   // Grade given by teacher
+  feedback    String?  // Teacher feedback
+  submittedAt DateTime @default(now())
+  gradedAt    DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  studentId String
+  student   User @relation(fields: [studentId], references: [id])
+  assignmentId String
+  assignment Assignment @relation(fields: [assignmentId], references: [id])
+
+  @@unique([studentId, assignmentId])
+  @@map("submissions")
 }
 
 // Grade model for assignments and exams
