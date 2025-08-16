@@ -14,4 +14,9 @@ export class AppController {
   getHealth() {
     return this.appService.getHealth();
   }
+
+  @Get('test')
+  getTest() {
+    return { message: 'Test endpoint working!' };
+  }
 }
