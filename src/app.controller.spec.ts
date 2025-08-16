@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 
 describe('AppController', () => {
   let appController: AppController;
+  let appService: AppService;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -12,11 +13,21 @@ describe('AppController', () => {
     }).compile();
 
     appController = app.get<AppController>(AppController);
+    appService = app.get<AppService>(AppService);
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return "LMS Backend is running!"', () => {
+      expect(appController.getHello()).toBe('LMS Backend is running!');
+    });
+  });
+
+  describe('health', () => {
+    it('should return health status', () => {
+      const health = appController.getHealth();
+      expect(health).toHaveProperty('status');
+      expect(health).toHaveProperty('timestamp');
+      expect(health.status).toBe('ok');
     });
   });
 });
