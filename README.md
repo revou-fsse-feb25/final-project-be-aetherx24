@@ -97,231 +97,245 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
-# Learning Management System (LMS) Backend
+# LMS Backend - Learning Management System
 
-A modern Learning Management System backend built with NestJS and Prisma, similar to Canvas and Moodle.
+A robust, scalable backend for a Learning Management System built with NestJS, Prisma, and PostgreSQL.
 
 ## 🚀 Features
 
+### Core Functionality
 - **User Management**: Students, Teachers, and Admins with role-based access
 - **Course Management**: Create, update, and manage courses with modules and lessons
-- **Enrollment System**: Track student enrollments in courses
-- **Grading System**: Manage assignments, quizzes, exams, and calculate GPA
-- **Authentication**: JWT-based authentication with secure password hashing
-- **API Documentation**: Swagger/OpenAPI documentation
-- **Database**: SQLite with Prisma ORM (easy to switch to PostgreSQL/MySQL)
+- **Content Organization**: Hierarchical structure with courses → modules → lessons
+- **Assignment System**: Create assignments, accept submissions, and grade them
+- **Enrollment Management**: Student course enrollment and progress tracking
+- **Grading System**: Comprehensive grading with feedback and analytics
+
+### Technical Features
+- **RESTful API**: Well-structured endpoints with proper HTTP methods
+- **Authentication**: JWT-based authentication with Passport.js
+- **Validation**: Comprehensive input validation with class-validator
+- **Documentation**: Auto-generated Swagger/OpenAPI documentation
+- **Database**: PostgreSQL with Prisma ORM for type-safe database operations
+- **Security**: Role-based access control and proper authorization
+
+## 🏗️ Architecture
+
+```
+src/
+├── auth/           # Authentication & Authorization
+├── users/          # User management
+├── courses/        # Course management
+├── modules/        # Course modules
+├── lessons/        # Individual lessons
+├── assignments/    # Course assignments
+├── submissions/    # Student submissions
+├── enrollments/    # Student enrollments
+├── grades/         # Grading system
+└── prisma/         # Database layer
+```
 
 ## 🛠️ Tech Stack
 
 - **Framework**: NestJS (Node.js)
-- **Database**: SQLite (with Prisma ORM)
-- **Authentication**: JWT + Passport
+- **Database**: PostgreSQL
+- **ORM**: Prisma
+- **Authentication**: JWT + Passport.js
 - **Validation**: class-validator + class-transformer
 - **Documentation**: Swagger/OpenAPI
-- **Language**: TypeScript
+- **Testing**: Jest
 
 ## 📋 Prerequisites
 
-- Node.js (v16 or higher)
-- npm or yarn
-- Basic knowledge of REST APIs
+- Node.js (v18 or higher)
+- PostgreSQL database
+- npm or yarn package manager
 
-## 🚀 Quick Start
+## 🚀 Getting Started
 
-### 1. Install Dependencies
+### 1. Clone the Repository
+```bash
+git clone <your-repo-url>
+cd lms-backend
+```
 
+### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-### 2. Set Up Environment Variables
-
-Copy the configuration file and update it:
-
-```bash
-cp config.env .env
-```
-
-Edit `.env` file with your configuration:
+### 3. Environment Configuration
+Create a `.env` file in the root directory:
 ```env
-JWT_SECRET=your-super-secret-jwt-key
-DATABASE_URL="file:./dev.db"
+# Database Configuration
+DATABASE_URL="postgresql://username:password@localhost:5432/lms_database"
+
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+
+# Server Configuration
 PORT=3000
 NODE_ENV=development
 ```
 
-### 3. Set Up Database
-
-Generate Prisma client and create database:
+### 4. Database Setup
 ```bash
+# Generate Prisma client
 npm run db:generate
+
+# Push schema to database
 npm run db:push
+
+# (Optional) Open Prisma Studio
+npm run db:studio
 ```
 
-### 4. Start the Application
-
-Development mode:
+### 5. Start the Application
 ```bash
+# Development mode
 npm run start:dev
+
+# Production mode
+npm run start:prod
 ```
 
-Production mode:
+The API will be available at `http://localhost:3000/api/v1`
+API documentation will be available at `http://localhost:3000/api`
+
+## 📚 API Endpoints
+
+### Authentication
+- `POST /auth/login` - User login
+- `POST /auth/register` - User registration
+
+### Users
+- `GET /users` - Get all users
+- `GET /users/:id` - Get user by ID
+- `POST /users` - Create new user
+- `PATCH /users/:id` - Update user
+- `DELETE /users/:id` - Delete user
+
+### Courses
+- `GET /courses` - Get all courses
+- `GET /courses/:id` - Get course by ID
+- `POST /courses` - Create new course
+- `PATCH /courses/:id` - Update course
+- `DELETE /courses/:id` - Delete course
+
+### Modules
+- `GET /modules` - Get all modules (with optional courseId filter)
+- `GET /modules/:id` - Get module by ID
+- `POST /modules` - Create new module
+- `PATCH /modules/:id` - Update module
+- `DELETE /modules/:id` - Delete module
+
+### Lessons
+- `GET /lessons` - Get all lessons (with optional moduleId filter)
+- `GET /lessons/:id` - Get lesson by ID
+- `POST /lessons` - Create new lesson
+- `PATCH /lessons/:id` - Update lesson
+- `DELETE /lessons/:id` - Delete lesson
+
+### Assignments
+- `GET /assignments` - Get all assignments (with optional courseId filter)
+- `GET /assignments/:id` - Get assignment by ID
+- `POST /assignments` - Create new assignment
+- `PATCH /assignments/:id` - Update assignment
+- `DELETE /assignments/:id` - Delete assignment
+
+### Submissions
+- `GET /submissions` - Get all submissions (with optional filters)
+- `GET /submissions/:id` - Get submission by ID
+- `POST /submissions` - Submit assignment
+- `PATCH /submissions/:id` - Update submission
+- `POST /submissions/:id/grade` - Grade submission (teachers only)
+- `DELETE /submissions/:id` - Delete submission
+
+### Enrollments
+- `GET /enrollments` - Get all enrollments
+- `GET /enrollments/:id` - Get enrollment by ID
+- `POST /enrollments` - Create new enrollment
+- `PATCH /enrollments/:id` - Update enrollment
+- `DELETE /enrollments/:id` - Delete enrollment
+
+### Grades
+- `GET /grades` - Get all grades
+- `GET /grades/:id` - Get grade by ID
+- `POST /grades` - Create new grade
+- `PATCH /grades/:id` - Update grade
+- `DELETE /grades/:id` - Delete grade
+
+## 🔐 Authentication & Authorization
+
+All endpoints (except login/register) require JWT authentication. Include the token in the Authorization header:
+
+```
+Authorization: Bearer <your-jwt-token>
+```
+
+### Role-Based Access Control
+- **STUDENT**: Can view courses, submit assignments, view grades
+- **TEACHER**: Can manage courses, create assignments, grade submissions
+- **ADMIN**: Full access to all resources
+
+## 🗄️ Database Schema
+
+The system uses a relational database with the following key entities:
+
+- **Users**: Students, teachers, and admins
+- **Courses**: Educational courses with metadata
+- **Modules**: Course sections containing lessons
+- **Lessons**: Individual learning units
+- **Assignments**: Course tasks and assessments
+- **Submissions**: Student assignment submissions
+- **Enrollments**: Student-course relationships
+- **Grades**: Assessment results and feedback
+
+## 🧪 Testing
+
+```bash
+# Unit tests
+npm run test
+
+# E2E tests
+npm run test:e2e
+
+# Test coverage
+npm run test:cov
+```
+
+## 📝 Development
+
+### Available Scripts
+- `npm run start:dev` - Start in development mode with hot reload
+- `npm run build` - Build the application
+- `npm run start:prod` - Start in production mode
+- `npm run lint` - Run ESLint
+- `npm run format` - Format code with Prettier
+
+### Code Style
+The project uses:
+- ESLint for code linting
+- Prettier for code formatting
+- TypeScript strict mode
+- NestJS best practices
+
+## 🚀 Deployment
+
+### Production Build
 ```bash
 npm run build
 npm run start:prod
 ```
 
-The API will be available at: `http://localhost:3000`
-API Documentation: `http://localhost:3000/api`
-
-## 📚 API Endpoints
-
-### Authentication
-- `POST /api/v1/auth/login` - User login
-
-### Users
-- `POST /api/v1/users` - Create user
-- `GET /api/v1/users` - Get all users (protected)
-- `GET /api/v1/users/:id` - Get user by ID (protected)
-- `PATCH /api/v1/users/:id` - Update user (protected)
-- `DELETE /api/v1/users/:id` - Delete user (protected)
-
-### Courses
-- `POST /api/v1/courses` - Create course (protected)
-- `GET /api/v1/courses` - Get all active courses
-- `GET /api/v1/courses/:id` - Get course with modules and lessons
-- `PATCH /api/v1/courses/:id` - Update course (protected)
-- `DELETE /api/v1/courses/:id` - Delete course (protected)
-
-### Enrollments
-- `POST /api/v1/enrollments` - Enroll student in course (protected)
-- `GET /api/v1/enrollments` - Get all enrollments (protected)
-- `GET /api/v1/enrollments/student/:studentId` - Get student enrollments (protected)
-- `GET /api/v1/enrollments/course/:courseId` - Get course enrollments (protected)
-- `PATCH /api/v1/enrollments/:id` - Update enrollment (protected)
-- `DELETE /api/v1/enrollments/:id` - Remove enrollment (protected)
-
-### Grades
-- `POST /api/v1/grades` - Create grade (protected)
-- `GET /api/v1/grades` - Get all grades (protected)
-- `GET /api/v1/grades/student/:studentId` - Get student grades (protected)
-- `GET /api/v1/grades/course/:courseId` - Get course grades (protected)
-- `GET /api/v1/grades/student/:studentId/gpa` - Get student GPA (protected)
-- `PATCH /api/v1/grades/:id` - Update grade (protected)
-- `DELETE /api/v1/grades/:id` - Delete grade (protected)
-
-## 🗄️ Database Schema
-
-The system includes the following main entities:
-
-- **Users**: Students, Teachers, Admins
-- **Courses**: Course information with teacher assignment
-- **Modules**: Course content organization
-- **Lessons**: Individual lesson content within modules
-- **Enrollments**: Student-course relationships
-- **Grades**: Assignment/exam scores and GPA calculation
-
-## 🔐 Authentication
-
-The API uses JWT tokens for authentication. To access protected endpoints:
-
-1. Login using `POST /api/v1/auth/login`
-2. Include the returned token in the Authorization header:
-   ```
-   Authorization: Bearer <your-jwt-token>
-   ```
-
-## 📖 Usage Examples
-
-### 1. Create a Teacher Account
-```bash
-curl -X POST http://localhost:3000/api/v1/users \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "teacher@example.com",
-    "password": "password123",
-    "firstName": "John",
-    "lastName": "Doe",
-    "role": "TEACHER"
-  }'
-```
-
-### 2. Login
-```bash
-curl -X POST http://localhost:3000/api/v1/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "teacher@example.com",
-    "password": "password123"
-  }'
-```
-
-### 3. Create a Course (with token)
-```bash
-curl -X POST http://localhost:3000/api/v1/courses \
-  -H "Authorization: Bearer <your-jwt-token>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Introduction to Computer Science",
-    "description": "Learn the basics of programming",
-    "code": "CS101",
-    "credits": 3,
-    "teacherId": "<teacher-user-id>"
-  }'
-```
-
-## 🧪 Testing
-
-Run tests:
-```bash
-npm run test
-```
-
-Run tests in watch mode:
-```bash
-npm run test:watch
-```
-
-## 📝 Available Scripts
-
-- `npm run start:dev` - Start in development mode with hot reload
-- `npm run build` - Build the application
-- `npm run start:prod` - Start in production mode
-- `npm run db:generate` - Generate Prisma client
-- `npm run db:push` - Push database schema changes
-- `npm run db:migrate` - Run database migrations
-- `npm run db:studio` - Open Prisma Studio (database GUI)
-
-## 🔧 Configuration
-
-### Database
-The default configuration uses SQLite for simplicity. To use PostgreSQL or MySQL:
-
-1. Update `prisma/schema.prisma`:
-   ```prisma
-   datasource db {
-     provider = "postgresql" // or "mysql"
-     url      = env("DATABASE_URL")
-   }
-   ```
-
-2. Update your `.env` file with the new database URL
-
-### JWT Configuration
-- `JWT_SECRET`: Secret key for JWT token signing
-- `JWT_EXPIRES_IN`: Token expiration time (default: 24h)
-
-## 🚀 Deployment
-
 ### Environment Variables
-- Set `NODE_ENV=production`
-- Use a strong `JWT_SECRET`
-- Configure production database URL
-- Set appropriate `PORT`
+Make sure to set proper environment variables for production:
+- Strong JWT secret
+- Production database URL
+- Proper NODE_ENV
 
-### Database
-- Run `npm run db:migrate` to apply migrations
-- Ensure database is accessible from your deployment environment
+### Docker (Optional)
+You can containerize the application using Docker for easier deployment.
 
 ## 🤝 Contributing
 
@@ -337,21 +351,20 @@ This project is licensed under the MIT License.
 
 ## 🆘 Support
 
-If you encounter any issues:
+For support and questions:
+- Check the API documentation at `/api`
+- Review the codebase structure
+- Open an issue on GitHub
 
-1. Check the API documentation at `/api`
-2. Review the console logs for error messages
-3. Ensure all environment variables are set correctly
-4. Verify database connectivity
+## 🔮 Future Enhancements
 
-## 🎯 Next Steps
-
-This is a basic LMS backend. You can extend it with:
-
-- File uploads for course materials
+- File upload support for assignments
 - Real-time notifications
-- Discussion forums
-- Video conferencing integration
 - Advanced analytics and reporting
+- Integration with external LMS standards
 - Mobile app support
-- Multi-tenancy for different institutions
+- Video conferencing integration
+- Advanced search and filtering
+- Bulk operations for teachers
+- Student progress tracking
+- Course completion certificates
