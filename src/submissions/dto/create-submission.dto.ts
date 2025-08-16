@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsFloat, Min, Max } from 'class-validator';
+import { IsString, IsOptional, IsNumber, Min, Max } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateSubmissionDto {
@@ -17,7 +17,7 @@ export class CreateSubmissionDto {
 
 export class GradeSubmissionDto {
   @ApiProperty({ description: 'Score given to the submission' })
-  @IsFloat()
+  @IsNumber()
   @Min(0)
   score: number;
 

@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsDateString, IsFloat, Min, IsBoolean } from 'class-validator';
+import { IsString, IsOptional, IsDateString, IsNumber, Min, IsBoolean } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateAssignmentDto {
@@ -21,7 +21,7 @@ export class CreateAssignmentDto {
   moduleId?: string;
 
   @ApiProperty({ description: 'Maximum possible score' })
-  @IsFloat()
+  @IsNumber()
   @Min(0)
   maxScore: number;
 
