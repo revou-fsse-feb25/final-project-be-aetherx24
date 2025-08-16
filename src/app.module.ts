@@ -6,6 +6,10 @@ import { UsersModule } from './users/users.module';
 import { CoursesModule } from './courses/courses.module';
 import { EnrollmentsModule } from './enrollments/enrollments.module';
 import { GradesModule } from './grades/grades.module';
+import { ModulesModule } from './modules/modules.module';
+import { LessonsModule } from './lessons/lessons.module';
+import { AssignmentsModule } from './assignments/assignments.module';
+import { SubmissionsModule } from './submissions/submissions.module';
 
 @Module({
   imports: [
@@ -19,6 +23,10 @@ import { GradesModule } from './grades/grades.module';
     CoursesModule,
     EnrollmentsModule,
     GradesModule,
+    ModulesModule,
+    LessonsModule,
+    AssignmentsModule,
+    SubmissionsModule,
   ],
 })
 export class AppModule {}
