@@ -26,7 +26,8 @@ model User {
   // Relations
   enrollments Enrollment[]
   courses     Course[]      // For teachers
-  grades      Grade[]
+  courseGrades CourseGrade[]
+  assignmentGrades AssignmentGrade[]
   submissions Submission[]
 
   @@map("users")
@@ -48,7 +49,8 @@ model Course {
   teacher   User         @relation(fields: [teacherId], references: [id])
   enrollments Enrollment[]
   modules   Module[]
-  grades    Grade[]
+  courseGrades CourseGrade[]
+  assignmentGrades AssignmentGrade[]
   assignments Assignment[]
 
   @@map("courses")
@@ -125,6 +127,7 @@ model Assignment {
   moduleId String?
   module   Module? @relation(fields: [moduleId], references: [id])
   submissions Submission[]
+  assignmentGrades AssignmentGrade[]
 
   @@map("assignments")
 }
@@ -145,21 +148,18 @@ model Submission {
   student   User @relation(fields: [studentId], references: [id])
   assignmentId String
   assignment Assignment @relation(fields: [assignmentId], references: [id])
+  assignmentGrade AssignmentGrade?
 
   @@unique([studentId, assignmentId])
   @@map("submissions")
 }
 
-// Grade model for assignments and exams
-model Grade {
+// Course Grade model for overall course performance
+model CourseGrade {
   id          String   @id @default(cuid())
-  score       Float    // Numeric score
-  maxScore    Float    // Maximum possible score
-  type        String
-  title       String   // Assignment/exam title
-  description String?
-  dueDate     DateTime?
-  submittedAt DateTime?
+  letterGrade String   // A, B, C, D, F
+  percentage  Float    // 0.0 to 100.0
+  comments    String?  // Teacher/admin comments
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -170,7 +170,33 @@ model Grade {
   course    Course @relation(fields: [courseId], references: [id])
 
   @@unique([studentId, courseId])
-  @@map("grades")
+  @@map("course_grades")
+}
+
+// Assignment Grade model for individual assignment scores
+model AssignmentGrade {
+  id          String   @id @default(cuid())
+  score       Float    // Actual score earned
+  maxScore    Float    // Maximum possible score
+  percentage  Float    // Calculated percentage
+  feedback    String?  // Teacher/admin feedback
+  gradedBy    String   // Teacher/admin ID who graded it
+  gradedAt    DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  submissionId String
+  submission   Submission @relation(fields: [submissionId], references: [id])
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  studentId    String
+  student      User      @relation(fields: [studentId], references: [id])
+  courseId     String
+  course       Course    @relation(fields: [courseId], references: [id])
+
+  @@unique([submissionId])
+  @@map("assignment_grades")
 }
 
 

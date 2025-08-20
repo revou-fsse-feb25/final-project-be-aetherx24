@@ -11,7 +11,8 @@ async function main() {
   await prisma.assignment.deleteMany();
   await prisma.lesson.deleteMany();
   await prisma.module.deleteMany();
-  await prisma.grade.deleteMany();
+  await prisma.assignmentGrade.deleteMany();
+  await prisma.courseGrade.deleteMany();
   await prisma.enrollment.deleteMany();
   await prisma.course.deleteMany();
   await prisma.user.deleteMany();
@@ -228,7 +229,7 @@ async function main() {
   console.log('🎓 Created enrollments');
 
   // Create a sample submission
-  await prisma.submission.create({
+  const submission1 = await prisma.submission.create({
     data: {
       studentId: student1.id,
       assignmentId: assignment1.id,
@@ -237,6 +238,46 @@ async function main() {
   });
 
   console.log('📤 Created sample submission');
+
+  // Create sample assignment grades
+  await prisma.assignmentGrade.create({
+    data: {
+      submissionId: submission1.id,
+      assignmentId: assignment1.id,
+      studentId: student1.id,
+      courseId: course1.id,
+      score: 85,
+      maxScore: 100,
+      percentage: 85.0,
+      feedback: 'Great work! Your calculator handles all basic operations correctly. Consider adding input validation.',
+      gradedBy: teacher1.id,
+    },
+  });
+
+  console.log('📊 Created sample assignment grade');
+
+  // Create sample course grades
+  await prisma.courseGrade.create({
+    data: {
+      studentId: student1.id,
+      courseId: course1.id,
+      letterGrade: 'B+',
+      percentage: 87.5,
+      comments: 'Good performance overall. Strong in programming fundamentals.',
+    },
+  });
+
+  await prisma.courseGrade.create({
+    data: {
+      studentId: student1.id,
+      courseId: course2.id,
+      letterGrade: 'A-',
+      percentage: 92.0,
+      comments: 'Excellent work on the portfolio project!',
+    },
+  });
+
+  console.log('📊 Created sample course grades');
 
   console.log('✅ Database seeding completed successfully!');
   console.log('\n📋 Sample Data Summary:');
@@ -247,6 +288,8 @@ async function main() {
   console.log(`📋 Assignments: ${await prisma.assignment.count()}`);
   console.log(`🎓 Enrollments: ${await prisma.enrollment.count()}`);
   console.log(`📤 Submissions: ${await prisma.submission.count()}`);
+  console.log(`📊 Course Grades: ${await prisma.courseGrade.count()}`);
+  console.log(`📊 Assignment Grades: ${await prisma.assignmentGrade.count()}`);
   
   console.log('\n🔑 Test Credentials:');
   console.log('Admin: admin@lms.com / admin123');
