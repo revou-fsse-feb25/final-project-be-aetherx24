@@ -27,12 +27,12 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  // Global prefix for API routes (excluding root)
+  // Global prefix for API routes (excluding root and health)
   app.setGlobalPrefix('api/v1', {
-    exclude: ['/'],
+    exclude: ['/', 'health'],
   });
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 8008;
   await app.listen(port);
   
   console.log(`🚀 LMS Backend is running on: http://localhost:${port}`);
