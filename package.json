@@ -11,7 +11,7 @@
     "build:railway": "npm run db:generate && nest build",
     "debug:build": "echo 'Starting build...' && npm run db:generate && echo 'Prisma generated' && nest build && echo 'Build complete' && dir dist",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "node dist/src/main.js",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main.js",
