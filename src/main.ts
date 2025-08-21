@@ -41,7 +41,7 @@ async function bootstrap() {
   });
   console.log('✅ Global prefix configured');
 
-  const port = process.env.PORT || 8008;
+  const port = process.env.PORT || 3000;
   console.log(`🌐 Attempting to bind to port ${port} on 0.0.0.0...`);
   await app.listen(port, '0.0.0.0');
   
