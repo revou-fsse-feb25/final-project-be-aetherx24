@@ -12,7 +12,10 @@ export class AppController {
 
   @Get('health')
   getHealth() {
-    return this.appService.getHealth();
+    console.log('Health check requested at:', new Date().toISOString());
+    const health = this.appService.getHealth();
+    console.log('Health response:', health);
+    return health;
   }
 
   @Get('test')
