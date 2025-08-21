@@ -42,11 +42,12 @@ async function bootstrap() {
   console.log('✅ Global prefix configured');
 
   const port = process.env.PORT || 3000;
-  console.log(`🌐 Attempting to bind to port ${port} on 0.0.0.0...`);
-  await app.listen(port, '0.0.0.0');
+  const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
+  console.log(`🌐 Attempting to bind to port ${port} on ${host}...`);
+  await app.listen(port, host);
   
-  console.log(`🚀 LMS Backend is running on: http://0.0.0.0:${port}`);
-  console.log(`📚 API Documentation available at: http://0.0.0.0:${port}/api`);
+  console.log(`🚀 LMS Backend is running on: http://${host}:${port}`);
+  console.log(`📚 API Documentation available at: http://${host}:${port}/api`);
   console.log('✅ Application started successfully!');
 }
 
