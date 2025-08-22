@@ -15,7 +15,9 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:3000',
-      'shanghairevolmsapi.up.railway.app',
+      'http://localhost:3002',
+      'https://final-project-fe-aetherx24-production-7278.up.railway.app',
+      'https://shanghairevolmsapi.up.railway.app',
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
