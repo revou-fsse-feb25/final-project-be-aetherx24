@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from './users.service';
@@ -18,6 +19,16 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Get('profile')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get current user profile' })
+  @ApiResponse({ status: 200, description: 'Return current user profile' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  getProfile(@Request() req) {
+    return this.usersService.findOne(req.user.sub);
+  }
 
   @Post()
   @ApiOperation({ summary: 'Create a new user' })
