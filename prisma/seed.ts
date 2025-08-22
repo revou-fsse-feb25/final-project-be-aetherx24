@@ -6,13 +6,13 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Starting database seeding...');
 
-  // Clear existing data
+  // Clear existing data (in correct order to respect foreign keys)
+  await prisma.assignmentGrade.deleteMany();
+  await prisma.courseGrade.deleteMany();
   await prisma.submission.deleteMany();
   await prisma.assignment.deleteMany();
   await prisma.lesson.deleteMany();
   await prisma.module.deleteMany();
-  await prisma.assignmentGrade.deleteMany();
-  await prisma.courseGrade.deleteMany();
   await prisma.enrollment.deleteMany();
   await prisma.course.deleteMany();
   await prisma.user.deleteMany();
