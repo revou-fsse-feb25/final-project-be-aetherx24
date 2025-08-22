@@ -76,4 +76,34 @@ export class AuthService {
       timestamp: new Date().toISOString(),
     };
   }
+
+  async refreshToken(user: any) {
+    // Verify user still exists and is active
+    const currentUser = await this.usersService.findOne(user.sub);
+    if (!currentUser) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const payload = { email: currentUser.email, sub: currentUser.id, role: currentUser.role };
+    const newToken = this.jwtService.sign(payload);
+    
+    return {
+      success: true,
+      message: 'Token refreshed successfully',
+      access_token: newToken,
+      token_type: 'Bearer',
+      expires_in: 86400, // 24 hours in seconds
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  async logout(user: any) {
+    // In a more sophisticated system, you might want to blacklist the token
+    // For now, we'll just return a success message
+    return {
+      success: true,
+      message: 'Logout successful',
+      timestamp: new Date().toISOString(),
+    };
+  }
 }
