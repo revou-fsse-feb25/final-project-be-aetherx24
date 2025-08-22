@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { EnrollmentsService } from './enrollments.service';
@@ -18,6 +19,16 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 @Controller('enrollments')
 export class EnrollmentsController {
   constructor(private readonly enrollmentsService: EnrollmentsService) {}
+
+  @Get('my-enrollments')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get current user enrollments' })
+  @ApiResponse({ status: 200, description: 'Return current user enrollments' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  getMyEnrollments(@Request() req) {
+    return this.enrollmentsService.findByStudent(req.user.sub);
+  }
 
   @Post()
   @UseGuards(JwtAuthGuard)
