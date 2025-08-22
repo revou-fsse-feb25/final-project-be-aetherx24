@@ -17,57 +17,73 @@ export class DashboardController {
   })
   @ApiResponse({ 
     status: 200, 
-    description: 'Dashboard data retrieved successfully',
+    description: 'Role-based dashboard data retrieved successfully. Returns different data based on user role (STUDENT, TEACHER, or ADMIN)',
     schema: {
-      type: 'object',
-      properties: {
-        summary: {
+      oneOf: [
+        {
           type: 'object',
           properties: {
-            totalCourses: { type: 'number', example: 3 },
-            completedAssignments: { type: 'number', example: 15 },
-            upcomingAssignments: { type: 'number', example: 5 }
+            type: { type: 'string', example: 'STUDENT_DASHBOARD' },
+            summary: {
+              type: 'object',
+              properties: {
+                totalCourses: { type: 'number', example: 3 },
+                completedAssignments: { type: 'number', example: 15 },
+                upcomingAssignments: { type: 'number', example: 5 },
+                averageGrade: { type: 'number', example: 87.5 }
+              }
+            },
+            recentEnrollments: { type: 'array' },
+            recentAssignments: { type: 'array' },
+            recentSubmissions: { type: 'array' },
+            recentGrades: { type: 'array' }
           }
         },
-        recentEnrollments: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              course: {
-                type: 'object',
-                properties: {
-                  title: { type: 'string', example: 'Introduction to Computer Science' },
-                  code: { type: 'string', example: 'CS101' },
-                  credits: { type: 'number', example: 3 }
-                }
+        {
+          type: 'object',
+          properties: {
+            type: { type: 'string', example: 'TEACHER_DASHBOARD' },
+            summary: {
+              type: 'object',
+              properties: {
+                totalCourses: { type: 'number', example: 2 },
+                totalStudents: { type: 'number', example: 45 },
+                totalAssignments: { type: 'number', example: 8 },
+                pendingSubmissions: { type: 'number', example: 12 },
+                averageClassSize: { type: 'number', example: 22.5 }
               }
-            }
+            },
+            courses: { type: 'array' },
+            pendingSubmissions: { type: 'array' },
+            recentGrades: { type: 'array' },
+            upcomingDueDates: { type: 'array' }
           }
         },
-        recentAssignments: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              title: { type: 'string', example: 'Programming Assignment 1' },
-              course: {
-                type: 'object',
-                properties: {
-                  title: { type: 'string' },
-                  code: { type: 'string' }
-                }
+        {
+          type: 'object',
+          properties: {
+            type: { type: 'string', example: 'ADMIN_DASHBOARD' },
+            summary: {
+              type: 'object',
+              properties: {
+                totalUsers: { type: 'number', example: 150 },
+                totalCourses: { type: 'number', example: 12 },
+                totalEnrollments: { type: 'number', example: 450 },
+                pendingApprovals: { type: 'number', example: 5 }
               }
-            }
+            },
+            recentUsers: { type: 'array' },
+            recentCourses: { type: 'array' },
+            systemHealth: { type: 'object' }
           }
         }
-      }
+      ]
     }
   })
   @ApiResponse({ status: 401, description: 'Unauthorized - JWT token required' })
   getDashboard(@Request() req) {
-    return this.dashboardService.getDashboardData(req.user.sub);
+    console.log(`🔍 Dashboard Controller: req.user.sub=${req.user.sub}, req.user.role=${req.user.role}`);
+    console.log(`🔍 Dashboard Controller: Full req.user=`, JSON.stringify(req.user, null, 2));
+    return this.dashboardService.getDashboardData(req.user.sub, req.user.role);
   }
 }
