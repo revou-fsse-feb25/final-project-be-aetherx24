@@ -205,7 +205,7 @@ npm run start:prod
 ```
 
 The API will be available at `http://localhost:3000/api/v1`
-API documentation will be available at `http://localhost:3000/api`
+API documentation will be available at `http://localhost:3000/api` (Swagger UI)
 
 ## 📚 API Endpoints
 
