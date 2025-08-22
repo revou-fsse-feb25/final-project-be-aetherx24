@@ -12,8 +12,16 @@ async function bootstrap() {
   console.log('✅ NestJS app created successfully');
 
   // Enable CORS for frontend communication
-  app.enableCors();
-  console.log('✅ CORS enabled');
+  app.enableCors({
+    origin: [
+      'http://localhost:3000',
+      'shanghairevolmsapi.up.railway.app',
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  });
+  console.log('✅ CORS configured with specific origins');
 
   // Global validation pipe
   app.useGlobalPipes(new ValidationPipe({
