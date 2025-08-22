@@ -151,6 +151,11 @@ src/
 - PostgreSQL database
 - npm or yarn package manager
 
+## 📖 Documentation
+
+- **[API Endpoints](./docs/ENDPOINTS_SUMMARY.md)** - Complete API reference
+- **[Project Documentation](./docs/)** - Additional documentation and guides
+
 ## 🚀 Getting Started
 
 ### 1. Clone the Repository
@@ -204,66 +209,23 @@ API documentation will be available at `http://localhost:3000/api`
 
 ## 📚 API Endpoints
 
-### Authentication
-- `POST /auth/login` - User login
-- `POST /auth/register` - User registration
+For a complete and detailed list of all available API endpoints, please see the [API Documentation](./docs/ENDPOINTS_SUMMARY.md).
 
-### Users
-- `GET /users` - Get all users
-- `GET /users/:id` - Get user by ID
-- `POST /users` - Create new user
-- `PATCH /users/:id` - Update user
-- `DELETE /users/:id` - Delete user
+### Quick Overview
+- **Authentication**: Login, registration, and JWT management
+- **User Management**: CRUD operations for users with role-based access
+- **Course Management**: Complete course lifecycle management
+- **Content Management**: Modules, lessons, and assignments
+- **Assessment System**: Submissions, grading, and feedback
+- **Enrollment System**: Student course enrollment and tracking
+- **Dashboard & Analytics**: User progress and system statistics
 
-### Courses
-- `GET /courses` - Get all courses
-- `GET /courses/:id` - Get course by ID
-- `POST /courses` - Create new course
-- `PATCH /courses/:id` - Update course
-- `DELETE /courses/:id` - Delete course
-
-### Modules
-- `GET /modules` - Get all modules (with optional courseId filter)
-- `GET /modules/:id` - Get module by ID
-- `POST /modules` - Create new module
-- `PATCH /modules/:id` - Update module
-- `DELETE /modules/:id` - Delete module
-
-### Lessons
-- `GET /lessons` - Get all lessons (with optional moduleId filter)
-- `GET /lessons/:id` - Get lesson by ID
-- `POST /lessons` - Create new lesson
-- `PATCH /lessons/:id` - Update lesson
-- `DELETE /lessons/:id` - Delete lesson
-
-### Assignments
-- `GET /assignments` - Get all assignments (with optional courseId filter)
-- `GET /assignments/:id` - Get assignment by ID
-- `POST /assignments` - Create new assignment
-- `PATCH /assignments/:id` - Update assignment
-- `DELETE /assignments/:id` - Delete assignment
-
-### Submissions
-- `GET /submissions` - Get all submissions (with optional filters)
-- `GET /submissions/:id` - Get submission by ID
-- `POST /submissions` - Submit assignment
-- `PATCH /submissions/:id` - Update submission
-- `POST /submissions/:id/grade` - Grade submission (teachers only)
-- `DELETE /submissions/:id` - Delete submission
-
-### Enrollments
-- `GET /enrollments` - Get all enrollments
-- `GET /enrollments/:id` - Get enrollment by ID
-- `POST /enrollments` - Create new enrollment
-- `PATCH /enrollments/:id` - Update enrollment
-- `DELETE /enrollments/:id` - Delete enrollment
-
-### Grades
-- `GET /grades` - Get all grades
-- `GET /grades/:id` - Get grade by ID
-- `POST /grades` - Create new grade
-- `PATCH /grades/:id` - Update grade
-- `DELETE /grades/:id` - Delete grade
+### New Frontend-Ready Endpoints
+- `GET /dashboard` - User dashboard with comprehensive data
+- `GET /users/profile` - Current user profile information
+- `GET /enrollments/my-enrollments` - User's course enrollments
+- `GET /todos` - User's pending tasks and assignments
+- `GET /feedback/recent` - Recent feedback and grades
 
 ## 🔐 Authentication & Authorization
 
