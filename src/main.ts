@@ -16,7 +16,7 @@ async function bootstrap() {
     origin: [
       'http://localhost:3000',
       'http://localhost:3002',
-      'https://final-project-fe-aetherx24-production-7278.up.railway.app',
+      'https://final-project-fe-aetherx24-production.up.railway.app',
       'https://shanghairevolmsapi.up.railway.app',
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
