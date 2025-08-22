@@ -20,7 +20,11 @@ export class AuthController {
     schema: {
       type: 'object',
       properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Login successful' },
         access_token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' },
+        token_type: { type: 'string', example: 'Bearer' },
+        expires_in: { type: 'number', example: 86400 },
         user: {
           type: 'object',
           properties: {
@@ -28,9 +32,11 @@ export class AuthController {
             email: { type: 'string', example: 'user@example.com' },
             firstName: { type: 'string', example: 'John' },
             lastName: { type: 'string', example: 'Doe' },
-            role: { type: 'string', example: 'STUDENT' }
+            role: { type: 'string', example: 'STUDENT' },
+            fullName: { type: 'string', example: 'John Doe' }
           }
-        }
+        },
+        timestamp: { type: 'string', example: '2025-08-22T12:00:00.000Z' }
       }
     }
   })
@@ -50,7 +56,11 @@ export class AuthController {
     schema: {
       type: 'object',
       properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'User registered successfully' },
         access_token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' },
+        token_type: { type: 'string', example: 'Bearer' },
+        expires_in: { type: 'number', example: 86400 },
         user: {
           type: 'object',
           properties: {
@@ -58,9 +68,11 @@ export class AuthController {
             email: { type: 'string', example: 'user@example.com' },
             firstName: { type: 'string', example: 'John' },
             lastName: { type: 'string', example: 'Doe' },
-            role: { type: 'string', example: 'STUDENT' }
+            role: { type: 'string', example: 'STUDENT' },
+            fullName: { type: 'string', example: 'John Doe' }
           }
-        }
+        },
+        timestamp: { type: 'string', example: '2025-08-22T12:00:00.000Z' }
       }
     }
   })

@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards, Request } from '@nestjs/common';
 import { AppService } from './app.service';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Controller()
 export class AppController {
@@ -21,5 +22,20 @@ export class AppController {
   @Get('test')
   getTest() {
     return { message: 'Test endpoint working!' };
+  }
+
+  @Get('auth-status')
+  @UseGuards(JwtAuthGuard)
+  getAuthStatus(@Request() req) {
+    return {
+      authenticated: true,
+      user: {
+        id: req.user.sub,
+        email: req.user.email,
+        role: req.user.role,
+      },
+      timestamp: new Date().toISOString(),
+      message: 'JWT token is valid',
+    };
   }
 }

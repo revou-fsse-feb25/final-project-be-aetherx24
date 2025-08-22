@@ -24,15 +24,23 @@ export class AuthService {
     }
 
     const payload = { email: user.email, sub: user.id, role: user.role };
+    const token = this.jwtService.sign(payload);
+    
     return {
-      access_token: this.jwtService.sign(payload),
+      success: true,
+      message: 'Login successful',
+      access_token: token,
+      token_type: 'Bearer',
+      expires_in: 86400, // 24 hours in seconds
       user: {
         id: user.id,
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
         role: user.role,
+        fullName: `${user.firstName} ${user.lastName}`,
       },
+      timestamp: new Date().toISOString(),
     };
   }
 
@@ -49,15 +57,23 @@ export class AuthService {
     });
 
     const payload = { email: user.email, sub: user.id, role: user.role };
+    const token = this.jwtService.sign(payload);
+    
     return {
-      access_token: this.jwtService.sign(payload),
+      success: true,
+      message: 'User registered successfully',
+      access_token: token,
+      token_type: 'Bearer',
+      expires_in: 86400, // 24 hours in seconds
       user: {
         id: user.id,
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
         role: user.role,
+        fullName: `${user.firstName} ${user.lastName}`,
       },
+      timestamp: new Date().toISOString(),
     };
   }
 }
