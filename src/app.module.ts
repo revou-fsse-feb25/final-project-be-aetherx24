@@ -10,6 +10,9 @@ import { ModulesModule } from './modules/modules.module';
 import { LessonsModule } from './lessons/lessons.module';
 import { AssignmentsModule } from './assignments/assignments.module';
 import { SubmissionsModule } from './submissions/submissions.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { TodosModule } from './todos/todos.module';
+import { FeedbackModule } from './feedback/feedback.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -29,6 +32,9 @@ import { AppService } from './app.service';
     LessonsModule,
     AssignmentsModule,
     SubmissionsModule,
+    DashboardModule,
+    TodosModule,
+    FeedbackModule,
   ],
   controllers: [AppController],
   providers: [AppService],
