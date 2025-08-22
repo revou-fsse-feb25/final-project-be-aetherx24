@@ -51,12 +51,13 @@ export class FeedbackService {
             select: {
               title: true,
               type: true,
-            },
-          },
-          course: {
-            select: {
-              title: true,
-              code: true,
+              maxScore: true,
+              course: {
+                select: {
+                  title: true,
+                  code: true,
+                },
+              },
             },
           },
         },
@@ -110,7 +111,7 @@ export class FeedbackService {
         score: feedback.score,
         maxScore: feedback.assignment.maxScore,
         percentage: feedback.score ? (feedback.score / feedback.assignment.maxScore) * 100 : null,
-        course: feedback.course,
+        course: feedback.assignment.course,
         date: feedback.gradedAt,
         assignmentType: feedback.assignment.type,
       })),

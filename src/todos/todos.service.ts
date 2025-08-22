@@ -84,12 +84,12 @@ export class TodosService {
             select: {
               title: true,
               maxScore: true,
-            },
-          },
-          course: {
-            select: {
-              title: true,
-              code: true,
+              course: {
+                select: {
+                  title: true,
+                  code: true,
+                },
+              },
             },
           },
         },
@@ -120,7 +120,7 @@ export class TodosService {
         title: `Feedback for: ${submission.assignment.title}`,
         type: 'feedback',
         submittedAt: submission.submittedAt,
-        course: submission.course,
+        course: submission.assignment.course,
         priority: 'low',
       })),
     };
