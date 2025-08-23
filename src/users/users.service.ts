@@ -18,14 +18,14 @@ export class UsersService {
       throw new ConflictException('User with this email already exists');
     }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    // Note: Password should already be hashed by the calling service
+    // No need to hash again here to avoid double hashing
 
     // Create the user
     const user = await this.prisma.user.create({
       data: {
         ...createUserDto,
-        password: hashedPassword,
+        // Password is already hashed from auth.service.ts
       },
       select: {
         id: true,
