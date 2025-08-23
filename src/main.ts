@@ -45,28 +45,78 @@ async function bootstrap() {
     .setDescription(`
       # Learning Management System API Documentation
       
-      ## Overview
+      ## 🚀 Overview
       This API provides comprehensive endpoints for managing a Learning Management System including:
-      - User authentication and management
-      - Course and content management
-      - Student enrollment and progress tracking
-      - Assignment submission and grading
-      - Dashboard and analytics
       
-      ## Base URL
+      ### 🔐 Authentication & User Management
+      - User registration, login, and JWT token management
+      - Role-based access control (STUDENT, TEACHER, ADMIN)
+      - User profile management and role assignment
+      
+      ### 📚 Course & Content Management
+      - Course creation, editing, and administration
+      - Module and lesson organization within courses
+      - Course enrollment and student management
+      
+      ### 📝 Assignment & Submission System
+      - Assignment creation and management by teachers
+      - Student assignment submissions
+      - Comprehensive grading system with feedback
+      
+      ### 📊 Performance Tracking & Analytics
+      - Role-based dashboards (Student, Teacher, Admin)
+      - Grade tracking and performance analytics
+      - Course progress monitoring
+      
+      ### 🎯 Additional Features
+      - Todo management and task tracking
+      - Feedback and communication system
+      - System health monitoring (Admin only)
+      
+      ## 🌐 Base URL
       All endpoints are prefixed with \`/api/v1\`
       
-      ## Authentication
+      ## 🔑 Authentication
       Most endpoints require JWT authentication. Include your token in the Authorization header:
       \`Authorization: Bearer <your-jwt-token>\`
       
-      ## Getting Started
-      1. Register a user: \`POST /api/v1/auth/register\`
-      2. Login: \`POST /api/v1/auth/login\`
-      3. Use the returned JWT token for authenticated requests
+      ## 🚦 Getting Started
+      1. **Register a user**: \`POST /api/v1/auth/register\`
+      2. **Login**: \`POST /api/v1/auth/login\`
+      3. **Use the returned JWT token** for authenticated requests
+      4. **Access role-based dashboard**: \`GET /api/v1/dashboard\`
       
-      ## Rate Limiting
+      ## 📋 API Structure
+      - **Authentication**: \`/api/v1/auth/*\` - Login, register, token refresh
+      - **Users**: \`/api/v1/users/*\` - User management and profiles
+      - **Courses**: \`/api/v1/courses/*\` - Course CRUD operations
+      - **Modules**: \`/api/v1/modules/*\` - Course module management
+      - **Lessons**: \`/api/v1/lessons/*\` - Lesson content management
+      - **Assignments**: \`/api/v1/assignments/*\` - Assignment creation and management
+      - **Submissions**: \`/api/v1/submissions/*\` - Student submissions and grading
+      - **Grades**: \`/api/v1/assignment-grades/*\` & \`/api/v1/course-grades/*\` - Performance tracking
+      - **Enrollments**: \`/api/v1/enrollments/*\` - Student course enrollment
+      - **Dashboard**: \`/api/v1/dashboard\` - Role-based data aggregation
+      - **Todos**: \`/api/v1/todos\` - Task management
+      - **Feedback**: \`/api/v1/feedback/*\` - Assignment feedback system
+      
+      ## 🔒 Role-Based Access
+      - **STUDENT**: Access to enrolled courses, assignments, submissions, grades
+      - **TEACHER**: Course management, assignment creation, grading, student analytics
+      - **ADMIN**: System-wide management, user administration, performance monitoring
+      
+      ## 📊 Response Formats
+      All endpoints return consistent JSON responses with:
+      - Success/error status indicators
+      - Descriptive messages
+      - Structured data payloads
+      - Timestamp information
+      
+      ## 🚨 Rate Limiting
       API requests are limited to prevent abuse. Please implement appropriate caching in your frontend.
+      
+      ## 🧪 Testing
+      Use the interactive Swagger UI below to test all endpoints with real data.
     `)
     .setVersion('1.0.0')
     .addBearerAuth(
@@ -82,16 +132,19 @@ async function bootstrap() {
     )
     .addServer('https://shanghairevolmsapi.up.railway.app', 'Production Server')
     .addServer('http://localhost:3000', 'Local Development')
-    .addTag('Authentication', 'User login, registration, and JWT management')
-    .addTag('Users', 'User profile and management operations')
-    .addTag('Courses', 'Course creation, management, and administration')
-    .addTag('Dashboard', 'User dashboard with comprehensive data')
-    .addTag('Todos', 'User task management and pending items')
-    .addTag('Feedback', 'Assignment feedback and grading information')
-    .addTag('Enrollments', 'Student course enrollment management')
-    .addTag('Assignments', 'Course assignment creation and management')
-    .addTag('Submissions', 'Student assignment submissions')
-    .addTag('Grades', 'Grading system and performance tracking')
+    .addTag('Authentication', '🔐 User login, registration, and JWT token management')
+    .addTag('Users', '👥 User profile management and role-based operations')
+    .addTag('Courses', '📚 Course creation, management, and content organization')
+    .addTag('Modules', '📖 Course module management and organization')
+    .addTag('Lessons', '📝 Individual lesson content and management')
+    .addTag('Assignments', '📋 Course assignment creation, management, and configuration')
+    .addTag('Submissions', '📤 Student assignment submissions and content management')
+    .addTag('Assignment Grades', '📊 Individual assignment grading and feedback system')
+    .addTag('Course Grades', '🎯 Overall course performance and grade tracking')
+    .addTag('Enrollments', '🎓 Student course enrollment and status management')
+    .addTag('Dashboard', '📈 Role-based dashboards with comprehensive analytics')
+    .addTag('Todos', '✅ Task management and pending item tracking')
+    .addTag('Feedback', '💬 Assignment feedback and communication system')
     .build();
   
   const document = SwaggerModule.createDocument(app, config);

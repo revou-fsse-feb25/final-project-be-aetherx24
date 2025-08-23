@@ -296,9 +296,9 @@ export class DashboardService {
       }),
       this.prisma.$queryRaw`
         SELECT 
-          COUNT(CASE WHEN role = 'STUDENT' THEN 1 END) as studentCount,
-          COUNT(CASE WHEN role = 'TEACHER' THEN 1 END) as teacherCount,
-          COUNT(CASE WHEN role = 'ADMIN' THEN 1 END) as adminCount
+          CAST(COUNT(CASE WHEN role = 'STUDENT' THEN 1 END) AS INTEGER) as studentCount,
+          CAST(COUNT(CASE WHEN role = 'TEACHER' THEN 1 END) AS INTEGER) as teacherCount,
+          CAST(COUNT(CASE WHEN role = 'ADMIN' THEN 1 END) AS INTEGER) as adminCount
         FROM users
       `,
       this.prisma.enrollment.count({
@@ -313,7 +313,11 @@ export class DashboardService {
         totalCourses,
         totalEnrollments,
         pendingApprovals,
-        userDistribution: systemStats[0],
+        userDistribution: {
+          studentCount: Number(systemStats[0]?.studentCount || 0),
+          teacherCount: Number(systemStats[0]?.teacherCount || 0),
+          adminCount: Number(systemStats[0]?.adminCount || 0),
+        },
       },
       recentUsers,
       recentCourses,
