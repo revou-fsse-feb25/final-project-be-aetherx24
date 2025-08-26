@@ -56,7 +56,7 @@ export class SubmissionsController {
   @ApiResponse({ status: 404, description: 'Assignment not found' })
   @ApiResponse({ status: 409, description: 'Conflict - Student has already submitted this assignment' })
   create(@Body() createSubmissionDto: CreateSubmissionDto, @Request() req) {
-    return this.submissionsService.create(createSubmissionDto, req.user.id);
+    return this.submissionsService.create(createSubmissionDto, req.user.sub);
   }
 
   @Get()
@@ -87,7 +87,7 @@ export class SubmissionsController {
   @ApiResponse({ status: 403, description: 'Forbidden - can only update own submissions' })
   @ApiResponse({ status: 404, description: 'Submission not found' })
   update(@Param('id') id: string, @Body() updateSubmissionDto: UpdateSubmissionDto, @Request() req) {
-    return this.submissionsService.update(id, updateSubmissionDto, req.user.id);
+    return this.submissionsService.update(id, updateSubmissionDto, req.user.sub);
   }
 
   @Post(':id/grade')
@@ -136,7 +136,7 @@ export class SubmissionsController {
   @ApiResponse({ status: 404, description: 'Submission not found' })
   @ApiResponse({ status: 409, description: 'Conflict - Submission already graded' })
   grade(@Param('id') id: string, @Body() gradeSubmissionDto: GradeSubmissionDto, @Request() req) {
-    return this.submissionsService.grade(id, gradeSubmissionDto, req.user.id);
+    return this.submissionsService.grade(id, gradeSubmissionDto, req.user.sub);
   }
 
   @Delete(':id')
@@ -145,6 +145,6 @@ export class SubmissionsController {
   @ApiResponse({ status: 403, description: 'Forbidden - can only delete own submissions' })
   @ApiResponse({ status: 404, description: 'Submission not found' })
   remove(@Param('id') id: string, @Request() req) {
-    return this.submissionsService.remove(id, req.user.id);
+    return this.submissionsService.remove(id, req.user.sub);
   }
 }
