@@ -65,6 +65,21 @@ export class CoursesService {
     });
   }
 
+  async getCourseIds() {
+    return this.prisma.course.findMany({
+      where: { isActive: true },
+      select: {
+        id: true,
+        title: true,
+        code: true,
+        description: true,
+      },
+      orderBy: {
+        title: 'asc',
+      },
+    });
+  }
+
   async findOne(id: string) {
     const course = await this.prisma.course.findUnique({
       where: { id },

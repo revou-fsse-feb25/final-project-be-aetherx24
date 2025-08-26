@@ -63,6 +63,29 @@ export class CoursesController {
     return this.coursesService.findAll();
   }
 
+  @Get('ids')
+  @ApiOperation({ 
+    summary: 'Get course ID mapping',
+    description: 'Returns a simplified list of courses with IDs for easy reference and frontend integration'
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Course ID mapping retrieved successfully',
+    schema: {
+      example: [
+        {
+          id: 'course_id',
+          title: 'Course Title',
+          code: 'CS101',
+          description: 'Course description'
+        }
+      ]
+    }
+  })
+  getCourseIds() {
+    return this.coursesService.getCourseIds();
+  }
+
   @Get(':id')
   @ApiOperation({ 
     summary: 'Get a course by ID',
