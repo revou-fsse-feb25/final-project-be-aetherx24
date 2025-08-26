@@ -88,6 +88,52 @@ export class LessonsService {
     });
   }
 
+  async findByCourse(courseId: string) {
+    // First check if course exists
+    const course = await this.prisma.course.findUnique({
+      where: { id: courseId },
+      select: {
+        id: true,
+        title: true,
+        code: true,
+        description: true,
+      },
+    });
+
+    if (!course) {
+      throw new NotFoundException('Course not found');
+    }
+
+    // Get all modules for the course with their lessons
+    const modulesWithLessons = await this.prisma.module.findMany({
+      where: { 
+        courseId: courseId,
+        isActive: true 
+      },
+      orderBy: { order: 'asc' },
+      include: {
+        lessons: {
+          where: { isActive: true },
+          orderBy: { order: 'asc' },
+          select: {
+            id: true,
+            title: true,
+            content: true,
+            order: true,
+            isActive: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+      },
+    });
+
+    return {
+      course,
+      modules: modulesWithLessons,
+    };
+  }
+
   async findOne(id: string) {
     const lesson = await this.prisma.lesson.findUnique({
       where: { id },

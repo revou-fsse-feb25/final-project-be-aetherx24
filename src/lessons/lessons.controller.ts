@@ -41,6 +41,46 @@ export class LessonsController {
     return this.lessonsService.findAll();
   }
 
+  @Get('course/:courseId')
+  @ApiOperation({ 
+    summary: 'Get all lessons for a specific course',
+    description: 'Retrieves all lessons organized by modules for a given course'
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Course lessons retrieved successfully',
+    schema: {
+      example: {
+        course: {
+          id: 'course_id',
+          title: 'Introduction to Programming',
+          code: 'CS101',
+          description: 'Learn the basics of programming'
+        },
+        modules: [
+          {
+            id: 'module_id',
+            title: 'Module 1: Basics',
+            order: 1,
+            lessons: [
+              {
+                id: 'lesson_id',
+                title: 'What is Programming?',
+                content: 'Programming is...',
+                order: 1,
+                isActive: true
+              }
+            ]
+          }
+        ]
+      }
+    }
+  })
+  @ApiResponse({ status: 404, description: 'Course not found' })
+  findByCourse(@Param('courseId') courseId: string) {
+    return this.lessonsService.findByCourse(courseId);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get a lesson by id' })
   @ApiResponse({ status: 200, description: 'Lesson retrieved successfully' })
