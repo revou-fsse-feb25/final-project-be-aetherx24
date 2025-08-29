@@ -256,6 +256,237 @@ The system uses a relational database with the following key entities:
 - **🎓 Enrollments**: Student-course relationships
 - **📊 Grades**: Assessment results and feedback
 
+### 📊 Entity Relationship Diagram (ERD)
+
+Below is a comprehensive visual representation of the database schema showing all entities, their relationships, and key attributes:
+
+![Database ERD](./docs/images/database-erd.png)
+
+*Entity Relationship Diagram showing the complete database structure of the LMS system*
+
+### 🏗️ Database Schema Overview
+
+#### **Core Entities & Relationships**
+
+| Entity | Purpose | Key Fields | Relationships |
+|--------|---------|------------|---------------|
+| **👥 Users** | User management and authentication | `id`, `email`, `role`, `firstName`, `lastName` | → Enrollments, → Courses (as teacher) |
+| **📚 Courses** | Educational course management | `id`, `title`, `code`, `description`, `teacherId` | → Modules, → Enrollments, → Users (teacher) |
+| **📖 Modules** | Course content organization | `id`, `title`, `order`, `courseId` | → Lessons, → Assignments, → Courses |
+| **📝 Lessons** | Individual learning content | `id`, `title`, `content`, `order`, `moduleId` | → Modules |
+| **📋 Assignments** | Course assessments and tasks | `id`, `title`, `description`, `maxScore`, `dueDate`, `courseId`, `moduleId` | → Submissions, → Courses, → Modules |
+| **📤 Submissions** | Student assignment responses | `id`, `score`, `feedback`, `studentId`, `assignmentId` | → Users (student), → Assignments |
+| **🎓 Enrollments** | Student-course relationships | `id`, `studentId`, `courseId`, `status`, `grade` | → Users (student), → Courses |
+| **📊 Course Grades** | Overall course performance | `id`, `studentId`, `courseId`, `grade`, `feedback` | → Users (student), → Courses |
+
+#### **Key Database Relationships**
+
+```
+Users (1) ←→ (Many) Enrollments ←→ (1) Courses
+Users (1) ←→ (Many) Courses (as teacher)
+Courses (1) ←→ (Many) Modules ←→ (Many) Lessons
+Courses (1) ←→ (Many) Assignments
+Modules (1) ←→ (Many) Assignments
+Assignments (1) ←→ (Many) Submissions
+Users (1) ←→ (Many) Submissions (as student)
+Users (1) ←→ (Many) Course Grades
+Courses (1) ←→ (Many) Course Grades
+```
+
+#### **Database Features**
+
+- **🔐 Role-Based Access**: Users have roles (STUDENT, TEACHER, ADMIN)
+- **📚 Hierarchical Content**: Courses → Modules → Lessons structure
+- **📋 Assessment System**: Assignments with submissions and grading
+- **🎓 Progress Tracking**: Enrollments and course grades for student progress
+- **🔄 Audit Trail**: `createdAt` and `updatedAt` timestamps on all entities
+- **✅ Data Integrity**: Foreign key constraints and referential integrity
+- **🆔 Unique Identifiers**: UUID-based primary keys for scalability
+
+#### **Sample Data Structure**
+
+```sql
+-- Example: Get a student's course with modules and lessons
+SELECT 
+  c.title as course_title,
+  m.title as module_title,
+  l.title as lesson_title,
+  l.content as lesson_content
+FROM courses c
+JOIN modules m ON c.id = m.courseId
+JOIN lessons l ON m.id = l.moduleId
+JOIN enrollments e ON c.id = e.courseId
+WHERE e.studentId = 'student_id' AND c.isActive = true
+ORDER BY m.order, l.order;
+```
+
+### 📋 **Detailed Table Schemas**
+
+#### **1. Users Table**
+
+| Column | Data Type | Constraints | Default | Description |
+|--------|-----------|-------------|---------|-------------|
+| `id` | `VARCHAR(36)` | `PRIMARY KEY` | `cuid()` | Unique user identifier |
+| `email` | `VARCHAR(255)` | `UNIQUE, NOT NULL` | - | User email address |
+| `password` | `VARCHAR(255)` | `NOT NULL` | - | Bcrypt hashed password |
+| `firstName` | `VARCHAR(100)` | `NOT NULL` | - | User's first name |
+| `lastName` | `VARCHAR(100)` | `NOT NULL` | - | User's last name |
+| `role` | `ENUM` | `NOT NULL` | `'STUDENT'` | User role (STUDENT, TEACHER, ADMIN) |
+| `createdAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Record creation timestamp |
+| `updatedAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Last update timestamp |
+
+**Indexes:**
+- `idx_user_email (email)`
+- `idx_user_role (role)`
+
+**Example Data:**
+```json
+{
+  "id": "cm123abc456def789",
+  "email": "john.doe@lms.com",
+  "password": "$2b$10$...",
+  "firstName": "John",
+  "lastName": "Doe",
+  "role": "STUDENT",
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-15T10:30:00Z"
+}
+```
+
+#### **2. Courses Table**
+
+| Column | Data Type | Constraints | Default | Description |
+|--------|-----------|-------------|---------|-------------|
+| `id` | `VARCHAR(36)` | `PRIMARY KEY` | `cuid()` | Unique course identifier |
+| `title` | `VARCHAR(255)` | `NOT NULL` | - | Course title |
+| `code` | `VARCHAR(20)` | `UNIQUE, NOT NULL` | - | Course code (e.g., CS101) |
+| `description` | `TEXT` | - | - | Course description |
+| `credits` | `INTEGER` | - | `3` | Course credit hours |
+| `isActive` | `BOOLEAN` | `NOT NULL` | `true` | Course availability status |
+| `teacherId` | `VARCHAR(36)` | `FOREIGN KEY` | - | Reference to users table |
+| `createdAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Record creation timestamp |
+| `updatedAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Last update timestamp |
+
+**Indexes:**
+- `idx_course_code (code)`
+- `idx_course_teacher (teacherId)`
+- `idx_course_active (isActive)`
+
+#### **3. Modules Table**
+
+| Column | Data Type | Constraints | Default | Description |
+|--------|-----------|-------------|---------|-------------|
+| `id` | `VARCHAR(36)` | `PRIMARY KEY` | `cuid()` | Unique module identifier |
+| `title` | `VARCHAR(255)` | `NOT NULL` | - | Module title |
+| `description` | `TEXT` | - | - | Module description |
+| `order` | `INTEGER` | `NOT NULL` | - | Module sequence order |
+| `isActive` | `BOOLEAN` | `NOT NULL` | `true` | Module availability status |
+| `courseId` | `VARCHAR(36)` | `FOREIGN KEY` | - | Reference to courses table |
+| `createdAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Record creation timestamp |
+| `updatedAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Last update timestamp |
+
+**Indexes:**
+- `idx_module_course (courseId)`
+- `idx_module_order (courseId, order)`
+
+#### **4. Lessons Table**
+
+| Column | Data Type | Constraints | Default | Description |
+|--------|-----------|-------------|---------|-------------|
+| `id` | `VARCHAR(36)` | `PRIMARY KEY` | `cuid()` | Unique lesson identifier |
+| `title` | `VARCHAR(255)` | `NOT NULL` | - | Lesson title |
+| `content` | `TEXT` | - | - | Lesson content/description |
+| `order` | `INTEGER` | `NOT NULL` | - | Lesson sequence order |
+| `isActive` | `BOOLEAN` | `NOT NULL` | `true` | Lesson availability status |
+| `moduleId` | `VARCHAR(36)` | `FOREIGN KEY` | - | Reference to modules table |
+| `createdAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Record creation timestamp |
+| `updatedAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Last update timestamp |
+
+**Indexes:**
+- `idx_lesson_module (moduleId)`
+- `idx_lesson_order (moduleId, order)`
+
+#### **5. Assignments Table**
+
+| Column | Data Type | Constraints | Default | Description |
+|--------|-----------|-------------|---------|-------------|
+| `id` | `VARCHAR(36)` | `PRIMARY KEY` | `cuid()` | Unique assignment identifier |
+| `title` | `VARCHAR(255)` | `NOT NULL` | - | Assignment title |
+| `description` | `TEXT` | - | - | Assignment description |
+| `maxScore` | `INTEGER` | `NOT NULL` | `100` | Maximum possible score |
+| `dueDate` | `TIMESTAMP` | - | - | Assignment due date |
+| `type` | `ENUM` | `NOT NULL` | `'HOMEWORK'` | Assignment type (HOMEWORK, QUIZ, EXAM) |
+| `isActive` | `BOOLEAN` | `NOT NULL` | `true` | Assignment availability status |
+| `courseId` | `VARCHAR(36)` | `FOREIGN KEY` | - | Reference to courses table |
+| `moduleId` | `VARCHAR(36)` | `FOREIGN KEY` | - | Reference to modules table |
+| `createdAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Record creation timestamp |
+| `updatedAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Last update timestamp |
+
+**Indexes:**
+- `idx_assignment_course (courseId)`
+- `idx_assignment_module (moduleId)`
+- `idx_assignment_due (dueDate)`
+
+#### **6. Submissions Table**
+
+| Column | Data Type | Constraints | Default | Description |
+|--------|-----------|-------------|---------|-------------|
+| `id` | `VARCHAR(36)` | `PRIMARY KEY` | `cuid()` | Unique submission identifier |
+| `score` | `INTEGER` | - | - | Assignment score |
+| `feedback` | `TEXT` | - | - | Teacher feedback |
+| `submittedAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Submission timestamp |
+| `studentId` | `VARCHAR(36)` | `FOREIGN KEY` | - | Reference to users table |
+| `assignmentId` | `VARCHAR(36)` | `FOREIGN KEY` | - | Reference to assignments table |
+| `createdAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Record creation timestamp |
+| `updatedAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Last update timestamp |
+
+**Indexes:**
+- `idx_submission_student (studentId)`
+- `idx_submission_assignment (assignmentId)`
+- `idx_submission_submitted (submittedAt)`
+
+#### **7. Enrollments Table**
+
+| Column | Data Type | Constraints | Default | Description |
+|--------|-----------|-------------|---------|-------------|
+| `id` | `VARCHAR(36)` | `PRIMARY KEY` | `cuid()` | Unique enrollment identifier |
+| `enrolledAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Enrollment timestamp |
+| `status` | `ENUM` | `NOT NULL` | `'ACTIVE'` | Enrollment status (ACTIVE, COMPLETED, DROPPED) |
+| `grade` | `VARCHAR(2)` | - | - | Course grade (A, B, C, D, F) |
+| `studentId` | `VARCHAR(36)` | `FOREIGN KEY` | - | Reference to users table |
+| `courseId` | `VARCHAR(36)` | `FOREIGN KEY` | - | Reference to courses table |
+| `createdAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Record creation timestamp |
+| `updatedAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Last update timestamp |
+
+**Indexes:**
+- `idx_enrollment_student (studentId)`
+- `idx_enrollment_course (courseId)`
+- `idx_enrollment_status (status)`
+
+#### **8. Course Grades Table**
+
+| Column | Data Type | Constraints | Default | Description |
+|--------|-----------|-------------|---------|-------------|
+| `id` | `VARCHAR(36)` | `PRIMARY KEY` | `cuid()` | Unique grade identifier |
+| `grade` | `VARCHAR(2)` | `NOT NULL` | - | Course grade (A, B, C, D, F) |
+| `feedback` | `TEXT` | - | - | Teacher feedback on overall performance |
+| `studentId` | `VARCHAR(36)` | `FOREIGN KEY` | - | Reference to users table |
+| `courseId` | `VARCHAR(36)` | `FOREIGN KEY` | - | Reference to courses table |
+| `createdAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Record creation timestamp |
+| `updatedAt` | `TIMESTAMP` | `NOT NULL` | `NOW()` | Last update timestamp |
+
+**Indexes:**
+- `idx_course_grade_student (studentId)`
+- `idx_course_grade_course (courseId)`
+- `idx_course_grade_student_course (studentId, courseId)`
+
+**Key Relationships:**
+- **Users** can have multiple **Enrollments** in different **Courses**
+- **Courses** contain multiple **Modules**, which contain multiple **Lessons**
+- **Assignments** belong to specific **Modules** and **Courses**
+- **Submissions** link **Students** to **Assignments** with grades and feedback
+- **Course Grades** track overall student performance in courses
+
 ---
 
 ## 🧪 Testing
