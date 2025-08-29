@@ -206,6 +206,10 @@ npm run start:prod
 
 For a complete and detailed list of all available API endpoints, please see the [API Documentation](./docs/ENDPOINTS_SUMMARY.md).
 
+For comprehensive error handling information, see the [Error Handling Guide](./docs/ERROR_HANDLING.md).
+
+For authentication guards and role-based access control, see the [Authentication Guards Guide](./docs/AUTHENTICATION_GUARDS.md).
+
 ### Quick Overview
 - **🔐 Authentication**: Login, registration, and JWT management
 - **👥 User Management**: CRUD operations for users with role-based access
