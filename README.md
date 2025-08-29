@@ -267,12 +267,15 @@ The system uses a relational database with the following key entities:
 
 ### 📊 Entity Relationship Diagram (ERD)
 
-Link to the ERD: https://dbdiagram.io/d/Final-Project-C-R-A-C-K-68b19c94777b52b76c2c9cbc
+**🔗 Interactive Database Diagram**: [View Full ERD on dbdiagram.io](https://dbdiagram.io/d/Final-Project-C-R-A-C-K-68b19c94777b52b76c2c9cbc)
+
 Below is a comprehensive visual representation of the database schema showing all entities, their relationships, and key attributes:
 
 ![Database ERD](./docs/images/database-erd.png)
 
 *Entity Relationship Diagram showing the complete database structure of the LMS system*
+
+> **💡 Tip**: Click the link above to view the interactive database diagram with detailed relationships, constraints, and field descriptions.
 
 ### 🏗️ Database Schema Overview
 
