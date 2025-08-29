@@ -267,6 +267,7 @@ The system uses a relational database with the following key entities:
 
 ### 📊 Entity Relationship Diagram (ERD)
 
+Link to the ERD: https://dbdiagram.io/d/Final-Project-C-R-A-C-K-68b19c94777b52b76c2c9cbc
 Below is a comprehensive visual representation of the database schema showing all entities, their relationships, and key attributes:
 
 ![Database ERD](./docs/images/database-erd.png)
