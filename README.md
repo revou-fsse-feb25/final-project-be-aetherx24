@@ -99,6 +99,52 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
 # LMS Backend - Learning Management System
 
+## 🌱 Getting Started with Sample Data
+
+This project includes comprehensive seed data to get you up and running quickly. The seed script creates a complete LMS environment with users, courses, modules, lessons, assignments, and sample submissions.
+
+### 🚀 Quick Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Set up your database (configure .env first)
+npx prisma db push
+
+# Seed the database with sample data
+npx prisma db seed
+```
+
+### 📋 What You Get
+
+- **👥 Users**: Admin, Teachers, and Students with test credentials
+- **📚 Courses**: Computer Science (CS101) and Web Development (WD101)
+- **📖 Content**: Modules, lessons, and assignments
+- **📊 Data**: Sample submissions, grades, and enrollments
+
+### 🔑 Test Credentials
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | `admin@lms.com` | `admin123` |
+| Teacher 1 | `teacher1@lms.com` | `teacher123` |
+| Teacher 2 | `teacher2@lms.com` | `teacher123` |
+| Student 1 | `student1@lms.com` | `student123` |
+| Student 2 | `student2@lms.com` | `student123` |
+
+### 📚 Detailed Documentation
+
+For complete information about the seed data, including:
+- Course structures and content
+- Assignment types and due dates
+- Data relationships and customization
+- Development workflow tips
+
+**See: [prisma/README.md](prisma/README.md)**
+
+---
+
 A robust, scalable backend for a Learning Management System built with NestJS, Prisma, and PostgreSQL.
 
 ## 🚀 Features
@@ -330,5 +376,6 @@ For support and questions:
 - Bulk operations for teachers
 - Student progress tracking
 - Course completion certificates
-#   T r i g g e r   d e p l o y m e n t  
+#   T r i g g e r   d e p l o y m e n t 
+ 
  
