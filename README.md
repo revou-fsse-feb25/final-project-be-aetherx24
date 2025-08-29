@@ -385,6 +385,21 @@ ORDER BY m.order, l.order;
 - `idx_course_teacher (teacherId)`
 - `idx_course_active (isActive)`
 
+**Example Data:**
+```json
+{
+  "id": "cmabc123def456ghi",
+  "title": "Introduction to Computer Science",
+  "code": "CS101",
+  "description": "Learn the fundamentals of computer science and programming",
+  "credits": 3,
+  "isActive": true,
+  "teacherId": "cm456def789ghi012",
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-15T10:30:00Z"
+}
+```
+
 #### **3. Modules Table**
 
 | Column | Data Type | Constraints | Default | Description |
@@ -402,6 +417,20 @@ ORDER BY m.order, l.order;
 - `idx_module_course (courseId)`
 - `idx_module_order (courseId, order)`
 
+**Example Data:**
+```json
+{
+  "id": "cmghi789jkl012mno",
+  "title": "Programming Basics",
+  "description": "Introduction to programming concepts and logic",
+  "order": 1,
+  "isActive": true,
+  "courseId": "cmabc123def456ghi",
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-15T10:30:00Z"
+}
+```
+
 #### **4. Lessons Table**
 
 | Column | Data Type | Constraints | Default | Description |
@@ -418,6 +447,20 @@ ORDER BY m.order, l.order;
 **Indexes:**
 - `idx_lesson_module (moduleId)`
 - `idx_lesson_order (moduleId, order)`
+
+**Example Data:**
+```json
+{
+  "id": "cmmno345pqr678stu",
+  "title": "What is Programming?",
+  "content": "Programming is the process of creating instructions for computers to follow...",
+  "order": 1,
+  "isActive": true,
+  "moduleId": "cmghi789jkl012mno",
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-15T10:30:00Z"
+}
+```
 
 #### **5. Assignments Table**
 
@@ -440,6 +483,23 @@ ORDER BY m.order, l.order;
 - `idx_assignment_module (moduleId)`
 - `idx_assignment_due (dueDate)`
 
+**Example Data:**
+```json
+{
+  "id": "cmstu901vwx234yza",
+  "title": "Hello World Program",
+  "description": "Create your first program that prints 'Hello, World!'",
+  "maxScore": 100,
+  "dueDate": "2024-02-15T23:59:59Z",
+  "type": "HOMEWORK",
+  "isActive": true,
+  "courseId": "cmabc123def456ghi",
+  "moduleId": "cmghi789jkl012mno",
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-15T10:30:00Z"
+}
+```
+
 #### **6. Submissions Table**
 
 | Column | Data Type | Constraints | Default | Description |
@@ -457,6 +517,20 @@ ORDER BY m.order, l.order;
 - `idx_submission_student (studentId)`
 - `idx_submission_assignment (assignmentId)`
 - `idx_submission_submitted (submittedAt)`
+
+**Example Data:**
+```json
+{
+  "id": "cmyza567bcd890efg",
+  "score": 95,
+  "feedback": "Excellent work! Your code is clean and well-commented.",
+  "submittedAt": "2024-02-14T15:30:00Z",
+  "studentId": "cm789ghi012jkl345",
+  "assignmentId": "cmstu901vwx234yza",
+  "createdAt": "2024-02-14T15:30:00Z",
+  "updatedAt": "2024-02-14T15:30:00Z"
+}
+```
 
 #### **7. Enrollments Table**
 
@@ -476,6 +550,20 @@ ORDER BY m.order, l.order;
 - `idx_enrollment_course (courseId)`
 - `idx_enrollment_status (status)`
 
+**Example Data:**
+```json
+{
+  "id": "cmefg123hij456klm",
+  "enrolledAt": "2024-01-20T09:00:00Z",
+  "status": "ACTIVE",
+  "grade": "A-",
+  "studentId": "cm789ghi012jkl345",
+  "courseId": "cmabc123def456ghi",
+  "createdAt": "2024-01-20T09:00:00Z",
+  "updatedAt": "2024-01-20T09:00:00Z"
+}
+```
+
 #### **8. Course Grades Table**
 
 | Column | Data Type | Constraints | Default | Description |
@@ -493,6 +581,19 @@ ORDER BY m.order, l.order;
 - `idx_course_grade_course (courseId)`
 - `idx_course_grade_student_course (studentId, courseId)`
 
+**Example Data:**
+```json
+{
+  "id": "cmklm789nop012qrs",
+  "grade": "A-",
+  "feedback": "Outstanding performance throughout the course. Strong problem-solving skills.",
+  "studentId": "cm789ghi012jkl345",
+  "courseId": "cmabc123def456ghi",
+  "createdAt": "2024-05-15T16:00:00Z",
+  "updatedAt": "2024-05-15T16:00:00Z"
+}
+```
+
 **Key Relationships:**
 - **Users** can have multiple **Enrollments** in different **Courses**
 - **Courses** contain multiple **Modules**, which contain multiple **Lessons**
@@ -500,231 +601,7 @@ ORDER BY m.order, l.order;
 - **Submissions** link **Students** to **Assignments** with grades and feedback
 - **Course Grades** track overall student performance in courses
 
-### 📊 **Example Data Samples**
 
-#### **👥 Users Table Example**
-```json
-[
-  {
-    "id": "cm123abc456def789",
-    "email": "admin@lms.com",
-    "password": "$2b$10$...",
-    "firstName": "Admin",
-    "lastName": "User",
-    "role": "ADMIN",
-    "createdAt": "2024-01-15T10:30:00Z",
-    "updatedAt": "2024-01-15T10:30:00Z"
-  },
-  {
-    "id": "cm456def789ghi012",
-    "email": "teacher1@lms.com",
-    "password": "$2b$10$...",
-    "firstName": "Jane",
-    "lastName": "Doe",
-    "role": "TEACHER",
-    "createdAt": "2024-01-15T10:30:00Z",
-    "updatedAt": "2024-01-15T10:30:00Z"
-  },
-  {
-    "id": "cm789ghi012jkl345",
-    "email": "student1@lms.com",
-    "password": "$2b$10$...",
-    "firstName": "John",
-    "lastName": "Smith",
-    "role": "STUDENT",
-    "createdAt": "2024-01-15T10:30:00Z",
-    "updatedAt": "2024-01-15T10:30:00Z"
-  }
-]
-```
-
-#### **📚 Courses Table Example**
-```json
-[
-  {
-    "id": "cmabc123def456ghi",
-    "title": "Introduction to Computer Science",
-    "code": "CS101",
-    "description": "Learn the fundamentals of computer science and programming",
-    "credits": 3,
-    "isActive": true,
-    "teacherId": "cm456def789ghi012",
-    "createdAt": "2024-01-15T10:30:00Z",
-    "updatedAt": "2024-01-15T10:30:00Z"
-  },
-  {
-    "id": "cmdef456ghi789jkl",
-    "title": "Web Development Fundamentals",
-    "code": "WD101",
-    "description": "Master HTML, CSS, and JavaScript for modern web development",
-    "credits": 4,
-    "isActive": true,
-    "teacherId": "cm456def789ghi012",
-    "createdAt": "2024-01-15T10:30:00Z",
-    "updatedAt": "2024-01-15T10:30:00Z"
-  }
-]
-```
-
-#### **📖 Modules Table Example**
-```json
-[
-  {
-    "id": "cmghi789jkl012mno",
-    "title": "Programming Basics",
-    "description": "Introduction to programming concepts and logic",
-    "order": 1,
-    "isActive": true,
-    "courseId": "cmabc123def456ghi",
-    "createdAt": "2024-01-15T10:30:00Z",
-    "updatedAt": "2024-01-15T10:30:00Z"
-  },
-  {
-    "id": "cmjkl012mno345pqr",
-    "title": "Data Structures",
-    "description": "Understanding arrays, lists, and basic data organization",
-    "order": 2,
-    "isActive": true,
-    "courseId": "cmabc123def456ghi",
-    "createdAt": "2024-01-15T10:30:00Z",
-    "updatedAt": "2024-01-15T10:30:00Z"
-  }
-]
-```
-
-#### **📝 Lessons Table Example**
-```json
-[
-  {
-    "id": "cmmno345pqr678stu",
-    "title": "What is Programming?",
-    "content": "Programming is the process of creating instructions for computers to follow...",
-    "order": 1,
-    "isActive": true,
-    "moduleId": "cmghi789jkl012mno",
-    "createdAt": "2024-01-15T10:30:00Z",
-    "updatedAt": "2024-01-15T10:30:00Z"
-  },
-  {
-    "id": "cmpqr678stu901vwx",
-    "title": "Variables and Data Types",
-    "content": "Variables are containers for storing data values...",
-    "order": 2,
-    "isActive": true,
-    "moduleId": "cmghi789jkl012mno",
-    "createdAt": "2024-01-15T10:30:00Z",
-    "updatedAt": "2024-01-15T10:30:00Z"
-  }
-]
-```
-
-#### **📋 Assignments Table Example**
-```json
-[
-  {
-    "id": "cmstu901vwx234yza",
-    "title": "Hello World Program",
-    "description": "Create your first program that prints 'Hello, World!'",
-    "maxScore": 100,
-    "dueDate": "2024-02-15T23:59:59Z",
-    "type": "HOMEWORK",
-    "isActive": true,
-    "courseId": "cmabc123def456ghi",
-    "moduleId": "cmghi789jkl012mno",
-    "createdAt": "2024-01-15T10:30:00Z",
-    "updatedAt": "2024-01-15T10:30:00Z"
-  },
-  {
-    "id": "cmvwx234yza567bcd",
-    "title": "Variables Quiz",
-    "description": "Test your understanding of variables and data types",
-    "maxScore": 50,
-    "dueDate": "2024-02-20T23:59:59Z",
-    "type": "QUIZ",
-    "isActive": true,
-    "courseId": "cmabc123def456ghi",
-    "moduleId": "cmghi789jkl012mno",
-    "createdAt": "2024-01-15T10:30:00Z",
-    "updatedAt": "2024-01-15T10:30:00Z"
-  }
-]
-```
-
-#### **📤 Submissions Table Example**
-```json
-[
-  {
-    "id": "cmyza567bcd890efg",
-    "score": 95,
-    "feedback": "Excellent work! Your code is clean and well-commented.",
-    "submittedAt": "2024-02-14T15:30:00Z",
-    "studentId": "cm789ghi012jkl345",
-    "assignmentId": "cmstu901vwx234yza",
-    "createdAt": "2024-02-14T15:30:00Z",
-    "updatedAt": "2024-02-14T15:30:00Z"
-  },
-  {
-    "id": "cmbcd890efg123hij",
-    "score": 42,
-    "feedback": "Good effort, but review the data types section.",
-    "submittedAt": "2024-02-19T14:45:00Z",
-    "studentId": "cm789ghi012jkl345",
-    "assignmentId": "cmvwx234yza567bcd",
-    "createdAt": "2024-02-19T14:45:00Z",
-    "updatedAt": "2024-02-19T14:45:00Z"
-  }
-]
-```
-
-#### **🎓 Enrollments Table Example**
-```json
-[
-  {
-    "id": "cmefg123hij456klm",
-    "enrolledAt": "2024-01-20T09:00:00Z",
-    "status": "ACTIVE",
-    "grade": "A-",
-    "studentId": "cm789ghi012jkl345",
-    "courseId": "cmabc123def456ghi",
-    "createdAt": "2024-01-20T09:00:00Z",
-    "updatedAt": "2024-01-20T09:00:00Z"
-  },
-  {
-    "id": "cmhij456klm789nop",
-    "enrolledAt": "2024-01-22T11:30:00Z",
-    "status": "ACTIVE",
-    "grade": "B+",
-    "studentId": "cm789ghi012jkl345",
-    "courseId": "cmdef456ghi789jkl",
-    "createdAt": "2024-01-22T11:30:00Z",
-    "updatedAt": "2024-01-22T11:30:00Z"
-  }
-]
-```
-
-#### **📊 Course Grades Table Example**
-```json
-[
-  {
-    "id": "cmklm789nop012qrs",
-    "grade": "A-",
-    "feedback": "Outstanding performance throughout the course. Strong problem-solving skills.",
-    "studentId": "cm789ghi012jkl345",
-    "courseId": "cmabc123def456ghi",
-    "createdAt": "2024-05-15T16:00:00Z",
-    "updatedAt": "2024-05-15T16:00:00Z"
-  },
-  {
-    "id": "cmnop012qrs345tuv",
-    "grade": "B+",
-    "feedback": "Good work overall. Continue practicing with web technologies.",
-    "studentId": "cm789ghi012jkl345",
-    "courseId": "cmdef456ghi789jkl",
-    "createdAt": "2024-05-15T16:00:00Z",
-    "updatedAt": "2024-05-15T16:00:00Z"
-  }
-]
-```
 
 ---
 
