@@ -200,6 +200,9 @@ npm run start:prod
 **API Endpoint**: `http://localhost:3000/api/v1`  
 **Documentation**: `http://localhost:3000/api` (Swagger UI)
 
+**🌐 Production Backend**: `https://shanghairevolmsapi.up.railway.app/`  
+**📖 Production Documentation**: `https://shanghairevolmsapi.up.railway.app/api` (Swagger UI)
+
 ---
 
 ## 📚 API Documentation
@@ -209,6 +212,12 @@ For a complete and detailed list of all available API endpoints, please see the 
 For comprehensive error handling information, see the [Error Handling Guide](./docs/ERROR_HANDLING.md).
 
 For authentication guards and role-based access control, see the [Authentication Guards Guide](./docs/AUTHENTICATION_GUARDS.md).
+
+### 🌐 **Live API Access**
+
+- **🔗 Production Backend**: [https://shanghairevolmsapi.up.railway.app/](https://shanghairevolmsapi.up.railway.app/)
+- **📖 Swagger Documentation**: [https://shanghairevolmsapi.up.railway.app/api](https://shanghairevolmsapi.up.railway.app/api)
+- **🧪 Test the API**: Use the production endpoints for frontend integration and testing
 
 ### Quick Overview
 - **🔐 Authentication**: Login, registration, and JWT management
